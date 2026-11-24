@@ -1,5 +1,8 @@
 """Thread Futures API: offcut forecasts, stall risk for unsold stock, and regulation search.
 
+Demo API for the earlier models. Parked until after the 26 Feb 2027 decision (build rule):
+it is portfolio work, not the resale desk.
+
     uvicorn api.main:app --app-dir src --reload
     # docs at http://127.0.0.1:8000/docs
 """

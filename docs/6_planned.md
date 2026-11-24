@@ -1,8 +1,8 @@
 # 6. Planned parts
 
-Parts that are planned and not built. Parts 11 to 17 would extend the earlier technical work; Part 18, the batch report prototype, would be the first piece of product software and would be built only after hand-run pilots show it is needed.
+Parts that are planned and not built (updated Tue 24 Nov 2026). Parts 11 to 17 are skills plans that would extend the earlier portfolio work. Part 18, the old batch report design, is superseded: the resale desk's technical map now lives in [ARCHITECTURE.md §1](ARCHITECTURE.md#1-the-resale-desk-planned-technical-map).
 
-Thread Futures is a B2B resale service for fashion brands: we act as their sales team for stock they can't sell themselves, and give them the money from each sale plus a report of where every item went. The code described here is earlier, exploratory technical work, not the product. Nothing new is built during customer discovery (to early 2027), and any early pilot runs by hand (spreadsheet and email). See [ARCHITECTURE.md](ARCHITECTURE.md) for how the parts fit together.
+Thread Futures is a B2B resale service for fashion brands: we act as their sales team for stock they can't sell themselves (checking, finding buyers such as off-price retailers/resale platforms, contracts), and give them the money from each sale plus a record of which approved buyer took each lot, and what they declare happened next. The resale desk is PLANNED (designed, not built): its map is in [ARCHITECTURE.md §1](ARCHITECTURE.md#1-the-resale-desk-planned-technical-map). The code described here is earlier portfolio and skills work: proof I can build, not the product. Until the 26 Feb 2027 decision we build nothing new: we use spreadsheets (the Google Sheet CRM, lot sheets, bid form and calculator), and scripts only when a real stock list or a real bid run needs them. No hosted app, no logins, no Stock Health index. See [ARCHITECTURE.md](ARCHITECTURE.md) for how the parts fit together. Updated Tue 24 Nov 2026.
 
 Each part starts with a header block (discipline, methodology, tools, status), then the short part note, then the full step-by-step guide.
 
@@ -30,11 +30,13 @@ Each part starts with a header block (discipline, methodology, tools, status), t
 
 ## Overview of Parts 11 to 17
 
+> **Skills plans (portfolio), not the product.** None is being built before the 26 Feb 2027 decision. Whether to move Parts 1–17 into a personal portfolio repo is Cat's decision after GO (D16).
+
 > **PLANNED, NOT BUILT.** Nothing in Parts 11 to 17 exists in the repo yet. None of it is claimed on the website until it's built, in the repo and its numbers are saved under `models/`.
 
 Parts are ordered by priority. Effort estimates come from the subproject summaries.
 
-Parts 11 to 17 extend the earlier, exploratory technical work; they are not the product and none is scheduled. Part 18, the batch report prototype ([below](#part-18-batch-report-prototype)), would come before these, but it is planned, not built: nothing new is built during customer discovery (to early 2027), and any early pilot runs by hand (spreadsheet and email).
+Parts 11 to 17 extend the earlier portfolio work; they are not the product and none is scheduled. Part 18 ([below](#part-18-batch-report-prototype)) is superseded by the resale desk map in [ARCHITECTURE.md §1](ARCHITECTURE.md#1-the-resale-desk-planned-technical-map).
 
 | # | Part | Skills it adds | Effort | Done when |
 |---|---|---|---|---|
@@ -436,46 +438,22 @@ Live API URL on Azure. Optional.
 
 ## Part 18: Batch report prototype
 
-**Discipline:** Data Engineering / AI Engineering (primary / secondary)  
-**Methodology:** Planned: a SQL data model for batches, units and handovers, a hash-chained append-only event log, and FastAPI endpoints (reusing the patterns in `src/api/main.py`) to record events and export the batch report and Article 24 disclosure rows.  
-**Tools:** SQL (SQLite/Postgres), FastAPI, pytest  
-**Status:** Planned: only after hand-run pilots (spreadsheet and email) show it is needed, and not during customer discovery (to early 2027).
-
-**Build state:** Planned, not built · **Data label:** Planned (not during customer discovery (to early 2027))  
-
-### In one line
-Planned product software: one batch report per batch of a brand's unsold stock, recording every unit and every step (check, sell or donate or recycle, report), with an export of the EU Article 24 disclosure rows.
-
-### Why it matters
-Thread Futures is a B2B resale service for fashion brands: we act as their sales team for stock they can't sell themselves. The brand keeps ownership of the stock until it is sold, gets the money from each sale and gets a report of where every item went. Parts 1 to 10 are earlier, exploratory technical work; this part would be product software.
-
-### Skills it adds
-Data modelling, SQL (SQLite/Postgres), FastAPI, audit logging, pytest
-
-### Plan
-- **Batch intake with check fields:** batch ID, SKUs, quantity, real size breakdown, condition codes, fibre composition (from the brand's product specs), reason unsold.
-- **Placement records, in waste-hierarchy order:**
-  - contracted buyers, with the contract terms per placement (no destruction, no export as waste, channel/marketplace limits, de-labelling where required, onward-destination reporting) and the buyer's report of onward destinations;
-  - an offer/refusal log for donation to EU social-economy entities (who was offered what, when, and their decision), so the donation derogation (offered to at least three suitable EU entities for at least 8 weeks) can be evidenced;
-  - waste-operator statements for last-resort recycling: the derogation statement handed over and the operator's receipt/treatment statement collected.
-- **Hash-chained, append-only log:** every event is appended and chained to the previous one, so any later edit is visible. Records are created at the moment of each handover, not rebuilt afterwards.
-- **Export:** a batch report per batch (kept 5 years, producible within 30 days of a request) and rows ready for the Article 24 disclosure table.
-- FastAPI endpoints to record events and export the batch report and disclosure rows.
-
-This is why the product isn't something a chatbot can reproduce: a chat can draft a template, but it can't create a charity's acceptance or a waste operator's statement after the fact.
-
-### Done when
-A demo season's batches produce a reproducible batch report and disclosure rows, with tests.
-
-### Effort
-About 4 days (an estimate). Not scheduled: nothing new is built during customer discovery (to early 2027), and any early pilot runs by hand (spreadsheet and email). This part would be built only if the pilot shows it is needed.
-
-### Note on the file name
-This part was first written up in its own file under `docs/parts/`, whose name used an earlier working name for the batch report. It now lives in this doc.
+**Superseded (24 Nov 2026).** Part 18 described a batch report built around donation offers and recycler statements for the earlier returns-and-damaged model, estimated at 'about 4 days'. The resale desk's technical map, data model and fee algorithm now live in [ARCHITECTURE.md §1](ARCHITECTURE.md#1-the-resale-desk-planned-technical-map). Nothing is built before the 26 Feb 2027 decision.
 
 ---
 
 ## Glossary for the planned parts
+
+Resale desk words (see [ARCHITECTURE.md §1](ARCHITECTURE.md#1-the-resale-desk-planned-technical-map)):
+
+- **Floor:** the brand's written jobber bid for the batch, the price it can already get. Every comparison is against this.
+- **Uplift:** buyer money minus pass-through minus the floor: the extra the desk finds above the brand's current written offer.
+- **Pass-through:** warehouse costs (carton check, photos, picking), arranged with and paid by the brand, at cost.
+- **Go bar:** the batch goes ahead only if the uplift is at least £1,500, so the minimum fee is covered by the extra and never by the brand's floor.
+- **Valid-until:** the date a written bid expires; GO only while the floor bid is still valid.
+- **Bid type:** `floor_jobber`, `floor_platform`, `ask_observed`, `indicative_written` or `firm_written`.
+
+Skills-plan words:
 
 - **DAX:** Power BI's formula language.
 - **Measure (BI):** a calculation evaluated in the current filter context.

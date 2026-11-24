@@ -614,7 +614,8 @@ select:focus,input[type=text]:focus,input[type=email]:focus,textarea:focus{outli
   <div class="wrap">
     <div class="eyebrow">Earlier technical work</div>
     <h1>Earlier work, <em class="accent" style="font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;color:var(--lime)">shown as proof I can build.</em></h1>
-    <p class="lede">Before settling on the Thread Futures service in late 2026, I built software and models. They are <b>not the product</b> and not a reason to buy. The service itself (selling brands' unsold stock and reporting where every item went) is planned, not built.</p>
+    <p class="lede">Before settling on the Thread Futures service in late 2026, I built software and models. They are <b>not the product</b> and not a reason to buy. The service itself (selling brands' unsold stock, with a record of which approved buyer took each lot) is planned, not built.</p>
+    <p class="lede" style="margin-top:12px">Built with AI-assisted tooling, reviewed and tested by me.</p>
     <div class="cta-row"><a class="btn btn-line" href="index.html">← Back to Thread Futures</a><a class="btn btn-line" href="https://github.com/catliugit/ThreadFutures">Code on GitHub</a></div>
     <nav class="work-jump" aria-label="On this page"><a href="#built">What I've built</a><a href="#stall">Stall-risk model</a><a href="#offcuts">Offcut forecast (earlier idea)</a></nav>
   </div>
@@ -627,7 +628,7 @@ select:focus,input[type=text]:focus,input[type=email]:focus,textarea:focus{outli
     </div>
     <div class="proof">
       <div><strong class="count" data-to="0.81" data-dec="2">0.81</strong><p><b>Stall-risk model:</b> ROC AUC for spotting lines about to stop selling, vs 0.60 for a simple sales-trend rule (real open retail data, not fashion)</p></div>
-      <div><strong class="count" data-to="21" data-dec="0" data-suf="/22">21/22</strong><p><b>Regulation search:</b> right article in the top three results for 21 of 22 test questions</p></div>
+      <div><strong class="count" data-to="21" data-dec="0" data-suf="/22">21/22</strong><p><b>Regulation search:</b> right article in the top three results for 21 of 22, on a 22-passage test set (ESPR articles only; the 2026 derogations act is not yet in the corpus)</p></div>
       <div><strong class="count" data-to="23" data-dec="0">23</strong><p>automated tests run on every pull request; 22 dbt data tests run on each build</p></div>
     </div>
     <div class="buildrow">
@@ -638,7 +639,7 @@ select:focus,input[type=text]:focus,input[type=email]:focus,textarea:focus{outli
           <li><time>9 Nov</time><span>CI: every pull request runs the tests, builds the Docker image and calls the API</span></li>
           <li><time>9 Nov</time><span>Monitoring report: drift and calibration by launch quarter</span></li>
           <li><time>9 Nov</time><span>dbt models on 1.06m real sales lines, 22 data tests</span></li>
-          <li><time>Later</time><span>Batch-record system for the service (item checks, buyer terms, charity offers and refusals, recycler statements, disclosure rows), built only after hand-run pilots show what is needed. Nothing new is being built during customer discovery (to early 2027) <span class="tag plan">Planned</span></span></li>
+          <li><time>Later</time><span>Batch record for the service (lot sheets, written bids with valid-until dates, buyer terms, custody to the first buyer of each lot and each buyer's signed statement), built only after hand-run pilots show what is needed. Until the 26 Feb 2027 decision we build nothing new: we use spreadsheets (the Google Sheet CRM, lot sheets, bid form and calculator), and scripts only when a real stock list or a real bid run needs them. No hosted app, no logins, no Stock Health index. <span class="tag plan">Planned</span></span></li>
         </ol>
       </div>
       <div class="code" aria-label="Run the API yourself">
@@ -670,8 +671,8 @@ curl -X POST localhost:8000/v1/stock/stall-risk \
       <div class="reveal">
         <p class="lede">A model I built that scores a product line from its first 12 weeks of sales. It is earlier work, shown as proof I can build. It is not the service and not a reason to buy.</p>
         <dl class="facts">
-          <div><dt>What's real</dt><dd>The model is built and runs in your browser, on real open retail data (UCI Online Retail II, a UK online retailer, <b>not fashion and not a customer</b>).</dd></div>
-          <div><dt>What it isn't</dt><dd>It isn't the product. The service (selling, donating or recycling unsold stock, with a report of where it went) is <b>planned, not built</b>.</dd></div>
+          <div><dt>What's real</dt><dd>The model is built and runs in your browser, on real open retail data (UCI Online Retail II, a UK giftware wholesaler), <b>not fashion and not a customer</b>.</dd></div>
+          <div><dt>What it isn't</dt><dd>It isn't the product. The service (selling brands' unsold stock in small lots to buyers they approve, with a record of where each lot went) is <b>planned, not built</b>.</dd></div>
         </dl>
       </div>
     </div>
@@ -724,7 +725,7 @@ curl -X POST localhost:8000/v1/stock/stall-risk \
         </table>
       </div>
       <button type="button" class="showall" id="showAll">Show all 8 lines</button>
-      <div class="panel-foot" id="riskFoot">Scored on later launches the model never saw. Data: UCI Online Retail II, a UK online retailer (CC BY 4.0), not a fashion customer. <a href="https://github.com/catliugit/ThreadFutures/tree/main/src/stock">src/stock</a></div>
+      <div class="panel-foot" id="riskFoot">Scored on later launches the model never saw. Data: UCI Online Retail II, a UK giftware wholesaler (CC BY 4.0): not fashion and not a customer. <a href="https://github.com/catliugit/ThreadFutures/tree/main/src/stock">src/stock</a></div>
     </div>
   </div>
 </section>
@@ -739,7 +740,7 @@ curl -X POST localhost:8000/v1/stock/stall-risk \
         <dl class="facts">
           <div><dt>What it is</dt><dd>A forecast of the kg of fabric a cutting run will leave over, with a P10–P90 range, from garment type, fabric, sizes and quantity.</dd></div>
           <div><dt>Simulated data</dt><dd>The model runs in your browser below. It was trained on 6,400 <b>simulated</b> cutting runs and tested on 1,600 held-out runs (8,000 in total). It has never seen real factory data.</dd></div>
-          <div><dt>Status</dt><dd><b>Parked.</b> Earlier work for a previous idea; not being developed or sold, and not part of the Thread Futures service.</dd></div>
+          <div><dt>Status</dt><dd><b>SIMULATED, PARKED.</b> Earlier work for a previous idea; not being developed or sold, and not part of the Thread Futures service.</dd></div>
         </dl>
       </div>
     </div>
@@ -822,8 +823,9 @@ curl -X POST localhost:8000/v1/stock/stall-risk \
     <div>
       <p><a class="logo foot-logo" href="index.html"><span class="wm-a">thread</span> <span class="wm-b">futures</span></a></p>
       <p style="margin-top:8px">Earlier technical work by Cathy Liu. Not the Thread Futures service. The stall-risk model uses UCI Online Retail II (CC BY 4.0), not fashion data; the parked fabric-waste prototype uses simulated data. Regulation text © European Union, EUR-Lex. General information, not legal advice.</p>
+      <p style="margin-top:8px">Thread Futures is an independent project by Cathy Liu, London. Not yet incorporated. Contact: use the form on the <a href="index.html#contact">main site</a>. <!-- CAT: add contact email (decision D12) --> Updated Tue 24 Nov 2026.</p>
     </div>
-    <nav aria-label="Footer"><a href="index.html">Main site</a><a href="index.html#how">How it works</a><a href="investors.html">For investors</a><a href="reports/monitoring.html">Monitoring report</a><a href="https://github.com/catliugit/ThreadFutures">GitHub</a><a href="index.html#contact">Contact us</a></nav>
+    <nav aria-label="Footer"><a href="index.html">Main site</a><a href="index.html#how">How it works</a><a href="investors.html">For programmes and investors</a><a href="reports/monitoring.html">Monitoring report</a><a href="privacy.html">Privacy</a><a href="https://github.com/catliugit/ThreadFutures">GitHub</a><a href="index.html#contact">Contact us</a></nav>
   </div>
 </footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
