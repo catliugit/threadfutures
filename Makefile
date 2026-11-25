@@ -3,7 +3,7 @@ export PYTHONPATH := src
 export MPLBACKEND := Agg
 export MLFLOW_DISABLE_AGENT_HINT := 1
 
-.PHONY: all offcuts stock retail dbt stall experiment monitor regsearch test api site site-export site-diff clean
+.PHONY: all offcuts stock retail dbt stall experiment monitor regsearch test api site site-export site-diff clean claims-lint
 
 # WARNING: site/ is the live website. Netlify publishes it whenever main changes.
 # Targets that write into site/ are marked [writes site/]. After running one,
@@ -56,6 +56,9 @@ site-diff:     ## show what the exports changed in the live website folder
 
 site:          ## [writes site/] copy the offcut browser model into site/model.js
 	$(PY) -c "import pathlib; m=pathlib.Path('models/pre_marker_model.json').read_text(); pathlib.Path('site/model.js').write_text('window.OFFCUT_MODEL=' + m + ';\n')"
+
+claims-lint:   ## check site/, README.md, docs/ (and sibling folders) for retired or banned claims; stdlib only
+	python3 scripts/claims_lint.py
 
 mlflow-ui:
 	mlflow ui --backend-store-uri sqlite:///data/mlflow.db

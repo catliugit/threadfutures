@@ -2,7 +2,7 @@
 
 Getting real open retail data into a tested warehouse and turning it into merchandising measures: the dbt and DuckDB pipeline (Part 02) and the stock health mart built on it (Part 03).
 
-Thread Futures is a B2B resale service for fashion brands: we act as their sales team for stock they can't sell themselves, and give them the money from each sale plus a report of where every item went. The code described here is earlier, exploratory technical work, not the product. Nothing new is built during customer discovery (to early 2027), and any early pilot runs by hand (spreadsheet and email). See [ARCHITECTURE.md](ARCHITECTURE.md) for how the parts fit together.
+Thread Futures is a B2B resale service for fashion brands: we act as their sales team for stock they can't sell themselves (checking, finding buyers such as off-price retailers/resale platforms, contracts), and give them the money from each sale plus a record of which approved buyer took each lot, and what they declare happened next. The resale desk is PLANNED (designed, not built): its map is in [ARCHITECTURE.md §1](ARCHITECTURE.md#1-the-resale-desk-planned-technical-map). The code described here is earlier portfolio and skills work: proof I can build, not the product. Until the 26 Feb 2027 decision we build nothing new: we use spreadsheets (the Google Sheet CRM, lot sheets, bid form and calculator), and scripts only when a real stock list or a real bid run needs them. No hosted app, no logins, no Stock Health index. See [ARCHITECTURE.md](ARCHITECTURE.md) for how the parts fit together. Updated Tue 24 Nov 2026.
 
 Each part starts with a header block (discipline, methodology, tools, status), then the short part note, then the full step-by-step guide.
 

@@ -1,0 +1,10 @@
+# claims-lint allowlist: one `path-glob:regex` per line.
+# The regex is matched against the hit and ~80 characters around it.
+# Add a line only for a legitimate use, and say why in a comment above it.
+
+# The future commercial co-founder role (not Cat's title).
+*:co-founder
+# Other people's titles (e.g. a brand's CEO or a programme's founders).
+*:(their|the brand's|a brand's|programme|their own) (CEO|founder)
+# The Innovator Founder visa route (a visa name, not a title).
+*:Innovator Founder

@@ -2,7 +2,7 @@
 
 Language-model and retrieval work: regulation search over EU law text (Part 07) and the purchase-order agent (Part 08, earlier exploratory work for a previous idea, garment factories, not the product).
 
-Thread Futures is a B2B resale service for fashion brands: we act as their sales team for stock they can't sell themselves, and give them the money from each sale plus a report of where every item went. The code described here is earlier, exploratory technical work, not the product. Nothing new is built during customer discovery (to early 2027), and any early pilot runs by hand (spreadsheet and email). See [ARCHITECTURE.md](ARCHITECTURE.md) for how the parts fit together.
+Thread Futures is a B2B resale service for fashion brands: we act as their sales team for stock they can't sell themselves (checking, finding buyers such as off-price retailers/resale platforms, contracts), and give them the money from each sale plus a record of which approved buyer took each lot, and what they declare happened next. The resale desk is PLANNED (designed, not built): its map is in [ARCHITECTURE.md §1](ARCHITECTURE.md#1-the-resale-desk-planned-technical-map). The code described here is earlier portfolio and skills work: proof I can build, not the product. Until the 26 Feb 2027 decision we build nothing new: we use spreadsheets (the Google Sheet CRM, lot sheets, bid form and calculator), and scripts only when a real stock list or a real bid run needs them. No hosted app, no logins, no Stock Health index. See [ARCHITECTURE.md](ARCHITECTURE.md) for how the parts fit together. Updated Tue 24 Nov 2026.
 
 Each part starts with a header block (discipline, methodology, tools, status), then the short part note, then the full step-by-step guide.
 
@@ -20,7 +20,7 @@ Each part starts with a header block (discipline, methodology, tools, status), t
 **Discipline:** AI Engineering / Data Science (primary / secondary)  
 **Methodology:** `src/regsearch/search.py` tokenises hand-chunked articles of Regulation (EU) 2024/1781 and ranks them with a hand-written BM25 (k1 = 1.5, b = 0.75) and with scikit-learn TF-IDF plus cosine similarity. Both are scored on 22 evaluation questions (hit@k, MRR); an optional LLM answer has its citations checked against the retrieved articles.  
 **Tools:** Python, scikit-learn, NumPy, LLM API (optional)  
-**Status:** Live: an internal research aid. It rebuilds its index on each call, which is fine at this size.
+**Status:** Prototype (internal research aid). It rebuilds its index on each call, which is fine at this size.
 
 **Build state:** Built · **Data label:** Retrieval prototype  
 
@@ -28,7 +28,7 @@ Each part starts with a header block (discipline, methodology, tools, status), t
 Finds the paragraph of EU law that answers a question about unsold products, and only accepts an AI answer if every citation is one of the passages it found.
 
 ### Why it matters
-Brands ask which exception applies to a batch. Answers must be traceable to the article, not invented. Part of the earlier, exploratory technical work, not the product; later it could check the legal references in a batch report (part 18).
+Brands ask which exception applies to a batch. Answers must be traceable to the article, not invented. Part of the earlier, exploratory technical work, not the product; later, after GO, it could check the legal references in the resale desk's batch report (see [ARCHITECTURE.md §1](ARCHITECTURE.md#1-the-resale-desk-planned-technical-map)).
 
 ### Data
 Regulation (EU) 2024/1781 (ESPR): Articles 23 to 26, key Article 2 definitions, Annex VII. 22 passages. © European Union, EUR-Lex.
@@ -40,10 +40,10 @@ Two retrievers compared: TF-IDF with cosine similarity, and BM25 (implemented by
 Python, scikit-learn (TF-IDF), BM25, LLM API (optional), FastAPI endpoint
 
 ### Result
-Right article in the top 3 for 21 of 22 questions (95%), first for 73%, MRR 0.83. Its one top-3 miss in the test set is a definitions question ("What is the legal meaning of destruction?").
+Right article in the top 3 for 21 of 22 questions (95%) on a 22-passage test set, first for 73%, MRR 0.83; a random ranking would get hit@3 of about 14%. Its one top-3 miss in the test set is a definitions question ("What is the legal meaning of destruction?").
 
 ### Honest limits
-Lexical search; embeddings or a short glossary of legal terms would help with paraphrased questions. General information, not legal advice.
+Lexical search; embeddings or a short glossary of legal terms would help with paraphrased questions. ESPR articles only: Delegated Reg. (EU) 2026/296 and Implementing Reg. (EU) 2026/2 are adopted and not yet in the corpus. General information, not legal advice.
 
 ### Where it lives
 src/regsearch/search.py, data/regulation/, models/regsearch_eval.json
@@ -208,7 +208,7 @@ A unit test (`test_citation_check_flags_unretrieved_articles`) checks that `[Art
 
 ##### hit@k
 **Definition:** share of questions where the right passage is in the top k.
-**Example:** 21 of 22 in the top 3 is 0.955.
+**Example:** 21 of 22 in the top 3 is 0.955 (on a 22-passage test set).
 
 ##### Mean reciprocal rank (MRR)
 **Definition:** average of 1 / (rank of the correct answer).
@@ -248,7 +248,7 @@ From `models/regsearch_eval.json` (22 questions, 22 passages):
 
 **How to read it:**
 
-- **21 of 22** questions have the right paragraph in the top 3 (95.5%). **16 of 22** have it first (72.7%).
+- **21 of 22** questions have the right paragraph in the top 3 (95.5%) on a 22-passage test set. **16 of 22** have it first (72.7%).
 - The two retrievers are essentially tied. TF-IDF has a slightly higher MRR (0.832 vs 0.825), so where both miss first place, TF-IDF tends to have the right answer a little higher. The README's "MRR 0.83" is the rounded TF-IDF figure; BM25, the default used by the API, rounds to 0.83 or 0.82 depending on rounding convention. I'd quote both to be exact.
 - With only 22 passages, a random ranking would get hit@3 of about 14% (3/22), so this is far above chance. But the corpus is tiny: the real test is a larger corpus with more similar passages.
 
@@ -274,7 +274,7 @@ Keyword search misses when the question uses different words from the law. The "
 
 **A correction to the summary:** the subproject summary says it "misses when the question uses different words from the law (e.g. 'charity' vs 'donation')". The per-question check shows the charity question isn't a top-3 miss (it ranks 2nd); the one top-3 miss is the definition question. Both are vocabulary problems, so the lesson holds, but the precise example is worth getting right.
 
-**What it taught me:** build the evaluation set first, then read the failures one by one. The aggregate score hides what's actually going wrong.
+**What it taught me:** build the evaluation set first, then read the failures individually. The aggregate score hides what's actually going wrong.
 
 **Fixes I'd try:** a small synonym glossary (charity to donation, clothes to apparel), proper stemming or lemmatisation, embeddings with hybrid ranking, and expanding the evaluation set with paraphrased questions.
 
@@ -289,7 +289,7 @@ I expected BM25 to win. On 22 short, similar-length passages, its length normali
 - Lexical search only; no embeddings yet.
 - The generated-answer path (`answer()`) is optional and needs an LLM API key. It isn't evaluated on a set of questions; only the citation check is unit-tested.
 - The citation check confirms a cited passage was retrieved, not that it supports the claim.
-- **General information, not legal advice.** It also doesn't cover delegated acts that the Commission will adopt for the derogations in Article 25(5).
+- **General information, not legal advice.** It doesn't yet include Delegated Regulation (EU) 2026/296 (the ten derogations, adopted and applying from 19 July 2026) or Implementing Regulation (EU) 2026/2 (the disclosure format, applying from 2 March 2027). The corpus is ESPR articles only (22 passages), so treat answers about exceptions as incomplete. Adding those texts waits until after the 26 Feb 2027 decision.
 - Not fashion-specific beyond the regulation itself; not used by a customer.
 
 ---
@@ -344,7 +344,7 @@ Generated answers (optional): copy `.env.example` to `.env`, set `LLM_API_KEY` a
 Reads a messy production order note, states its assumptions, and calls tested tools for every number.
 
 ### Why it matters
-Real orders arrive as emails and messages. The agent does the language work; code does the maths, so results are reproducible. Part of the earlier, exploratory technical work, not the product; the same pattern could later turn brands' messy stock lists into batch records for the batch report (part 18).
+Real orders arrive as emails and messages. The agent does the language work; code does the maths, so results are reproducible. Part of the earlier, exploratory technical work, not the product; the same pattern could later, after GO, help the M1 normaliser turn brands' messy stock lists into one canonical list ([ARCHITECTURE.md §1](ARCHITECTURE.md#1-the-resale-desk-planned-technical-map)).
 
 ### Data
 Free-text order notes.

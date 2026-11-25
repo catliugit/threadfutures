@@ -1,5 +1,10 @@
 """Retrieval over the EU rules on unsold products, with an evaluation and cited answers.
 
+Retrieval prototype over 22 ESPR passages; Delegated Reg. (EU) 2026/296 (the ten
+derogations) and Implementing Reg. (EU) 2026/2 (the disclosure format) are adopted but
+not in the corpus, so answers about exceptions are incomplete. General information,
+not legal advice.
+
 The corpus is Regulation (EU) 2024/1781, chunked by article paragraph (Articles 23-26,
 key Article 2 definitions, Annex VII). Two retrievers are compared on a hand-written set
 of 22 questions with a known correct paragraph:
